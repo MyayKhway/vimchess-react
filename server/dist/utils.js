@@ -1,0 +1,69 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FENtoBoard = FENtoBoard;
+exports.boardtoFEN = boardtoFEN;
+exports.reverseBoard = reverseBoard;
+function FENtoBoard(fen) {
+    let ranks = fen.split('/');
+    let board = [];
+    let index = 0;
+    for (let k = 0; k < ranks.length; k++) {
+        let arr = [];
+        // rank means row
+        let rank = ranks[k];
+        for (let i = 0; i < rank.length; i++) {
+            if (rank[i] >= '0' && rank[i] <= '9') {
+                for (let j = 0; j < Number(rank[i]); j++) {
+                    arr.push({
+                        index: (k * 8) + i + j,
+                        piece: null
+                    });
+                    index += 1;
+                }
+            }
+            else {
+                arr.push({
+                    index: index,
+                    piece: rank[i]
+                });
+                index += 1;
+            }
+        }
+        board.push(arr);
+    }
+    return board;
+}
+function boardtoFEN(board) {
+    let fen = '';
+    for (let i = 0; i < board.length; i++) {
+        // rank means row
+        let rank = board[i];
+        let null_count = 0;
+        for (let j = 0; j < rank.length; j++) {
+            if (rank[j].piece != null) {
+                if (null_count > 0) {
+                    fen = fen + null_count.toString();
+                    null_count = 0;
+                    fen = fen + rank[j].piece;
+                }
+                else
+                    fen = fen + rank[j].piece;
+            }
+            else {
+                null_count = null_count + 1;
+            }
+        }
+        if (null_count > 0)
+            fen = fen + null_count.toString();
+        fen = fen + '/';
+        null_count = 0;
+    }
+    return fen.slice(0, -1);
+}
+function reverseBoard(board) {
+    for (let i = 0; i < board.length; i++) {
+        let rank = board[i];
+        rank.reverse();
+    }
+    return board.reverse();
+}
