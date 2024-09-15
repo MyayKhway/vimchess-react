@@ -47,7 +47,16 @@ io.on('connection', (sock) => {
         io.to(game_code).emit('game ready', games[game_code], game_code);
     });
     sock.on('piece moved', (board, sock_id, game_code) => {
-        io.to(game_code).emit('board update', board);
+        let updated_game = {
+            white: games[game_code].white,
+            black: games[game_code].black,
+            board: board,
+            graveyard: {
+                white: [],
+                black: [],
+            },
+        };
+        io.to(game_code).emit('board update', updated_game);
     });
     sock.on('piece captured', (board, sock_id, white_grave, black_grave, game_code) => {
         let fen = (0, utils_1.boardtoFEN)(board);
@@ -61,8 +70,16 @@ io.on('connection', (sock) => {
                 io.to(games[game_code]['white']).emit("Defeat");
             }
         }
-        else
-            io.to(game_code).emit('board update', board, white_grave, black_grave);
+        let updated_game = {
+            white: games[game_code].white,
+            black: games[game_code].black,
+            board: board,
+            graveyard: {
+                white: [],
+                black: [],
+            },
+        };
+        io.to(game_code).emit('board update', updated_game);
     });
     sock.on('game join', (sock_id, game_id) => {
         // wrong ID
