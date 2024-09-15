@@ -3,7 +3,7 @@ import StartMenu from './components/startMenu';
 import socket from './utils/socket';
 import { useEffect, useState } from 'react';
 import { BoardType, GameType } from './utils/types';
-import { boardtoFEN, FENtoBoard, reverseBoard } from './utils/util';
+import { boardtoFEN, FENtoBoard } from './utils/util';
 
 function App() {
     const [gameReady, setGameReady] = useState(false);
@@ -26,12 +26,17 @@ function App() {
             setGameCode(gameCode);
             setGameReady(true);
         });
-        socket.on('board update', (board) => {
-            if (team == 'white') setBoard(board);
-            else if (team == 'black') {
-                let FEN = boardtoFEN(board);
+        socket.on('board update', (game) => {
+            if (team == 'white') { 
+                console.log(game.board, " from App White.");
+                setBoard(game.board);
+            } else if (team == 'black') {
+                console.log(game.board, " from App black before reversing.");
+                let FEN = boardtoFEN(game.board);
                 let reversedFEN = FEN.split("").reverse().join("");
+                console.log(reversedFEN);
                 let newBoard = FENtoBoard(reversedFEN);
+                console.log(newBoard, " from App black after reversing.");
                 setBoard(newBoard);
             }
         });

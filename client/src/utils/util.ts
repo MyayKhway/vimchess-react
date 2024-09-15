@@ -12,7 +12,7 @@ export function FENtoBoard(fen: string): BoardType {
             if (rank[i] >= '0' && rank[i] <= '9') {
                 for (let j = 0; j < Number(rank[i]); j++) {
                     arr.push({
-                        index: (k * 8) + i + j,
+                        index: index,
                         piece: null
                     });
                     index += 1;

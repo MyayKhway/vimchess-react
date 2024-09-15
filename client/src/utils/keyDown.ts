@@ -88,8 +88,7 @@ export default function handleKeyDown(
     } else if (e.key == "h") {
         // move left h
         if (!first_file.includes(highlighted)) {
-            const new_highlighted = highlighted - 1;
-            setHighlighted(new_highlighted);
+            setHighlighted(prev => prev - 1);
         } else {
             const new_highlighted = highlighted + 7;
             setHighlighted(new_highlighted);

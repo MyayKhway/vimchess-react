@@ -264,14 +264,12 @@ function diagonal_squares(pos: PositionType) {
 export function move(from: number, to: number, board: BoardType, legalMoves: number[]): [BoardType, boolean] {
     let movingPiece = board[Math.floor(from / 8)][from % 8].piece;
     let dstPiece = board[Math.floor(to / 8)][to % 8].piece;
-    let blankSquare: SquareType = { index: from, piece: null };
     console.log(legalMoves);
     if (!legalMoves.includes(to)) {
-        throw new Error("Not a valid move.");
+        return [board, false];
     } else {
         board[Math.floor(from / 8)][from % 8].piece = null;
         board[Math.floor(to / 8)][to % 8].piece = movingPiece;
-        console.log(board);
     }
     return [board, dstPiece != null];
 }

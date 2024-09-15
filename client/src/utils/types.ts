@@ -34,7 +34,7 @@ export interface ServerToClientEvents {
     'game ready': (game: GameType, game_code: string) => void,
     'Defeat': () => void,
     'Victory': () => void,
-    'board update': (board: BoardType) => void,
+    'board update': (game: GameType) => void,
     'game not created': (id: string) => void,
 
 }
