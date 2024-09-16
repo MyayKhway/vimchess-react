@@ -10,6 +10,7 @@ interface BoardPropsType {
     team: string,
     gameCode: string,
 }
+
 export default function Board(props: BoardPropsType) {
     const [selected, setSelected] = useState<number>(-1);
     const [highlighted, setHighlighted] = useState<number>(0);

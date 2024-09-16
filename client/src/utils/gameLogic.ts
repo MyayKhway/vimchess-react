@@ -261,15 +261,14 @@ function diagonal_squares(pos: PositionType) {
     return moves.filter(ele => ele[0] != pos[0] && ele[1] != pos[1]);
 }
 
-export function move(from: number, to: number, board: BoardType, legalMoves: number[]): [BoardType, boolean] {
+export function move(from: number, to: number, board: BoardType, legalMoves: number[]): [BoardType, string | null] {
     let movingPiece = board[Math.floor(from / 8)][from % 8].piece;
     let dstPiece = board[Math.floor(to / 8)][to % 8].piece;
-    console.log(legalMoves);
     if (!legalMoves.includes(to)) {
-        return [board, false];
+        return [board, null];
     } else {
         board[Math.floor(from / 8)][from % 8].piece = null;
         board[Math.floor(to / 8)][to % 8].piece = movingPiece;
     }
-    return [board, dstPiece != null];
+    return [board, dstPiece];
 }

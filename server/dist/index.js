@@ -58,7 +58,7 @@ io.on('connection', (sock) => {
         };
         io.to(game_code).emit('board update', updated_game);
     });
-    sock.on('piece captured', (board, sock_id, white_grave, black_grave, game_code) => {
+    sock.on('piece captured', (board, sock_id, white_piece, black_piece, game_code) => {
         let fen = (0, utils_1.boardtoFEN)(board);
         if ((0, game_1.gameEnd)(fen)) {
             if (fen.toUpperCase() == fen) {
@@ -69,14 +69,16 @@ io.on('connection', (sock) => {
                 io.to(games[game_code]['black']).emit("Victory");
                 io.to(games[game_code]['white']).emit("Defeat");
             }
+            setTimeout(() => delete games[game_code], 10000);
         }
+        let prevGame = games[game_code];
         let updated_game = {
-            white: games[game_code].white,
-            black: games[game_code].black,
+            white: prevGame.white,
+            black: prevGame.black,
             board: board,
             graveyard: {
-                white: [],
-                black: [],
+                white: white_piece ? prevGame.graveyard.white.concat([white_piece]) : prevGame.graveyard.white,
+                black: black_piece ? prevGame.graveyard.black.concat([black_piece]) : prevGame.graveyard.black,
             },
         };
         io.to(game_code).emit('board update', updated_game);

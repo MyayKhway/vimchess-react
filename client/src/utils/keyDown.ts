@@ -17,6 +17,7 @@ export default function handleKeyDown(
     team: string,
     gameCode: string
 ) {
+    let secondG = false;
     // if I used functional updates I would not need previous states like selected
     // and highlighted as arguments. I can just pass a function to setSelected and 
     // setHighlighted
@@ -41,11 +42,11 @@ export default function handleKeyDown(
             // move to that position ( attack the square if enemy )
             let [newBoard, captured] = move(selected, highlighted, board, availableMoves);
             setSelected(-1);
-            if (captured) {
+            if (captured != null) {
                 if (team == "white") {
-                    socket.emit('piece captured', newBoard, socket.id || "", [], [], gameCode);
+                    socket.emit('piece captured', newBoard, socket.id || "", "", captured, gameCode);
                 } else if (team == "black") {
-                    socket.emit('piece captured', reverseBoard(newBoard), socket.id || "", [], [], gameCode);
+                    socket.emit('piece captured', reverseBoard(newBoard), socket.id || "", captured, "", gameCode);
                 }
             }
             else {
@@ -102,5 +103,18 @@ export default function handleKeyDown(
             const new_highlighted = highlighted - 7;
             setHighlighted(new_highlighted);
         }
+    } else if (e.key == "g") {
+        if (secondG) {
+            setHighlighted(0);
+            secondG = false;
+        } else {
+            secondG = true;
+        }
+    } else if (e.key == "G") {
+        setHighlighted(56);
+    } else if (e.key == "0") {
+        setHighlighted(prev => Math.floor(prev/8) * 8);
+    } else if (e.key == "%") {
+        setHighlighted(prev => (Math.floor(prev/8) * 8) + 7);
     }
 }

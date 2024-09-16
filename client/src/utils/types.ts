@@ -43,8 +43,8 @@ export interface ClientToServerEvents {
     'game create': (sock_id: string) => void,
     'piece captured': (board: BoardType,
         sock_id: string,
-        white_grave: string[],
-        black_grave: string[],
+        white_piece: string,
+        black_piece: string,
         game_code: string
     ) => void,
     'piece moved': (
