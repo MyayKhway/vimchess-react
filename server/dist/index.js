@@ -14,9 +14,18 @@ const app = (0, express_1.default)();
 /*const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/8/7R';*/
 const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
 const server = http_1.default.createServer(app);
+let origin;
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV == "development") {
+    origin = "http://localhost:5173";
+}
+else {
+    origin = "http://68.183.228.97";
+}
+console.log(origin);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:5173"
+        origin: origin
     },
     //handlePreflightRequest: (req, res) => {
     //const headers = {

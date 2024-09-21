@@ -2,7 +2,7 @@ import http from 'http';
 import express from "express";
 import { Server } from 'socket.io';
 import { gameEnd, generateID } from './game';
-import { GamesType, GameType, GraveyardType, BoardType, SquareType } from './types';
+import { GamesType, GameType, BoardType } from './types';
 import { FENtoBoard, boardtoFEN } from './utils';
 
 
@@ -14,9 +14,17 @@ const app = express();
 /*const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/8/7R';*/
 const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
 const server = http.createServer(app);
+let origin;
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV == "development") {
+    origin = "http://localhost:5173";
+} else {
+    origin = "http://68.183.228.97";
+}
+console.log(origin);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173"
+        origin: origin
     },
     //handlePreflightRequest: (req, res) => {
     //const headers = {
