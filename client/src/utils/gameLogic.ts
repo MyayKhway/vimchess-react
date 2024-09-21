@@ -1,4 +1,4 @@
-import { BoardType, SquareType } from "./types";
+import { BoardType } from "./types";
 type PositionType = [number, number];
 
 export function listValidMoves(index: number, piece: string | null, board: BoardType, team: string) {

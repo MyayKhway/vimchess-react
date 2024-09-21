@@ -4,7 +4,8 @@ import '@fontsource/roboto';
 import App from './App.jsx'
 import './index.css'
 
-createRoot(document.getElementById('root')).render(
+let root = document.getElementById('root') as HTMLElement;
+createRoot(root).render(
   <StrictMode>
     <App />
   </StrictMode>,
