@@ -21,8 +21,9 @@ if (process.env.NODE_ENV == "development") {
     server = http.createServer(app);
 } else {
     server = https.createServer({
-        cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem"),
-        key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem"),
+        cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem", "utf8"),
+        key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem", "utf8"),
+        ca: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/chain.pem", "utf8"),
     }, app);
 }
 let origin;
