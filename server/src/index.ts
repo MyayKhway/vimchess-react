@@ -1,18 +1,30 @@
+import { readFileSync } from 'fs';
 import http from 'http';
+import https from 'https';
 import express from "express";
 import { Server } from 'socket.io';
 import { gameEnd, generateID } from './game';
 import { GamesType, GameType, BoardType } from './types';
 import { FENtoBoard, boardtoFEN } from './utils';
+import cors from "cors";
 
 let games: GamesType = {};
 
 const app = express();
+app.use(cors);
 
 /*const ini_board = 'r7/8/8/8/8/8/PPPPPPPP/RNBQKBNR';*/
 /*const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/8/7R';*/
 const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
-const server = http.createServer(app);
+let server;
+if (process.env.NODE_ENV == "development") {
+    server = http.createServer(app);
+} else {
+    server = https.createServer({
+        cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem"),
+        key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem"),
+    }, app);
+}
 let origin;
 if (process.env.NODE_ENV == "development") {
     origin = "http://localhost:5173";
@@ -24,6 +36,7 @@ const io = new Server(server, {
         origin: origin,
         methods: ["GET", "POST"]
     },
+    path: "https://vimchess.kentlynn.me/websocket/"
     //handlePreflightRequest: (req, res) => {
     //const headers = {
     //"Access-Control-Allow-Headers": "Content-Type, Authorization",
