@@ -5,7 +5,6 @@ import { gameEnd, generateID } from './game';
 import { GamesType, GameType, BoardType } from './types';
 import { FENtoBoard, boardtoFEN } from './utils';
 
-
 let games: GamesType = {};
 
 const app = express();
@@ -15,16 +14,15 @@ const app = express();
 const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
 const server = http.createServer(app);
 let origin;
-console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV == "development") {
     origin = "http://localhost:5173";
 } else {
-    origin = "http://68.183.228.97";
+    origin = "http://vimchess.kentlynn.me";
 }
-console.log(origin);
 const io = new Server(server, {
     cors: {
-        origin: origin
+        origin: origin,
+        methods: ["GET", "POST"]
     },
     //handlePreflightRequest: (req, res) => {
     //const headers = {
@@ -57,7 +55,7 @@ io.on('connection', (sock) => {
         io.to(game_code).emit('game ready', games[game_code], game_code);
     })
 
-    sock.on('piece moved', (board, sock_id, game_code) => {
+    sock.on('piece moved', (board, game_code) => {
         let updated_game: GameType = {
             white: games[game_code].white,
             black: games[game_code].black,
@@ -70,7 +68,7 @@ io.on('connection', (sock) => {
         io.to(game_code).emit('board update', updated_game);
     });
 
-    sock.on('piece captured', (board, sock_id, white_piece, black_piece, game_code) => {
+    sock.on('piece captured', (board, white_piece, black_piece, game_code) => {
         let fen = boardtoFEN(board);
         if (gameEnd(fen)) {
             if (fen.toUpperCase() == fen) {
