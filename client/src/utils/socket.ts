@@ -4,6 +4,6 @@ import { ServerToClientEvents, ClientToServerEvents } from "./types";
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 if (process.env.NODE_ENV == 'development') {
     socket = io("http://localhost:8000",);
-} else { socket = io("http://68.183.228.97:8000",); }
+} else { socket = io("http://vimchess.kentlynn.me/socket",); }
 
 export default socket;
