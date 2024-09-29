@@ -37,7 +37,8 @@ const io = new Server(server, {
         origin: origin,
         methods: ["GET", "POST"]
     },
-    path: "https://vimchess.kentlynn.me/websocket/"
+    path: "/websocket",
+    addTrailingSlash: false,
     //handlePreflightRequest: (req, res) => {
     //const headers = {
     //"Access-Control-Allow-Headers": "Content-Type, Authorization",
