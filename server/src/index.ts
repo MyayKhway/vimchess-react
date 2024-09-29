@@ -37,8 +37,7 @@ const io = new Server(server, {
         origin: "*",
         methods: ["GET", "POST"]
     },
-    path: "/websocket",
-    addTrailingSlash: false,
+    path: "/websocket/",
     //handlePreflightRequest: (req, res) => {
     //const headers = {
     //"Access-Control-Allow-Headers": "Content-Type, Authorization",
