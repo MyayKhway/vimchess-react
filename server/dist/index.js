@@ -8,24 +8,36 @@ const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
 const game_1 = require("./game");
 const utils_1 = require("./utils");
+const cors_1 = __importDefault(require("cors"));
 let games = {};
 const app = (0, express_1.default)();
+app.use(cors_1.default);
 /*const ini_board = 'r7/8/8/8/8/8/PPPPPPPP/RNBQKBNR';*/
 /*const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/8/7R';*/
 const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
-const server = http_1.default.createServer(app);
+let server;
+if (process.env.NODE_ENV == "development") {
+    server = http_1.default.createServer(app);
+}
+else {
+    server = http_1.default.createServer(app);
+    //server = https.createServer({
+    //   cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem", "utf8"),
+    //   key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem", "utf8"),
+    //ca: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/chain.pem", "utf8"),
+    //}, app);
+}
 let origin;
-console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV == "development") {
     origin = "http://localhost:5173";
 }
 else {
-    origin = "http://68.183.228.97";
+    origin = "http://vimchess.kentlynn.me/";
 }
-console.log(origin);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: origin
+        origin: "*",
+        methods: ["GET", "POST"]
     },
     //handlePreflightRequest: (req, res) => {
     //const headers = {
@@ -55,7 +67,7 @@ io.on('connection', (sock) => {
         sock.join(game_code);
         io.to(game_code).emit('game ready', games[game_code], game_code);
     });
-    sock.on('piece moved', (board, sock_id, game_code) => {
+    sock.on('piece moved', (board, game_code) => {
         let updated_game = {
             white: games[game_code].white,
             black: games[game_code].black,
@@ -67,7 +79,7 @@ io.on('connection', (sock) => {
         };
         io.to(game_code).emit('board update', updated_game);
     });
-    sock.on('piece captured', (board, sock_id, white_piece, black_piece, game_code) => {
+    sock.on('piece captured', (board, white_piece, black_piece, game_code) => {
         let fen = (0, utils_1.boardtoFEN)(board);
         if ((0, game_1.gameEnd)(fen)) {
             if (fen.toUpperCase() == fen) {

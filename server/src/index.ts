@@ -20,17 +20,18 @@ let server;
 if (process.env.NODE_ENV == "development") {
     server = http.createServer(app);
 } else {
-    server = https.createServer({
-        cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem", "utf8"),
-        key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem", "utf8"),
-        ca: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/chain.pem", "utf8"),
-    }, app);
+    server = http.createServer(app);
+    //server = https.createServer({
+    //   cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem", "utf8"),
+//   key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem", "utf8"),
+        //ca: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/chain.pem", "utf8"),
+    //}, app);
 }
 let origin;
 if (process.env.NODE_ENV == "development") {
     origin = "http://localhost:5173";
 } else {
-    origin = "http://vimchess.kentlynn.me";
+    origin = "http://vimchess.kentlynn.me/";
 }
 const io = new Server(server, {
     cors: {
