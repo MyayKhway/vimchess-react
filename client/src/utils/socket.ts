@@ -6,7 +6,7 @@ if (process.env.NODE_ENV == 'development') {
     socket = io("http://localhost:8000",);
 } else {
     socket = io(
-        "https://vimchess.kentlynn.me/", { transports: ["websockets"], });
+        "http://vimchess.kentlynn.me/", { transports: ["websockets"], });
 }
 
 export default socket;
