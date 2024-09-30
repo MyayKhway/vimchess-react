@@ -134,6 +134,6 @@ io.on('connection', (sock) => {
 
 server.on('error', (err) => console.error(err));
 
-server.listen(8000, () => {
+server.listen(3000, () => {
     console.log('server is ready on 8000');
 })
