@@ -6,7 +6,6 @@ if (process.env.NODE_ENV == 'development') {
     socket = io("http://localhost:8000",);
 } else { socket = io({ 
         transports: ["websockets"],
-        path: "/websocket/",
     }); }
 
 export default socket;
