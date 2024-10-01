@@ -37,9 +37,9 @@ export default function Board(props: BoardPropsType) {
 
     return (
         <div className="bg-boardBackground grid grid-rows-8 grid-cols-8 gap-0 w-96 h-96">
-            {props.board.map((rank) => rank.map((square: SquareType, index) =>
+            {props.board.map((rank) => rank.map((square: SquareType) =>
                 <Square
-                    key={index}
+                    key={square.index}
                     piece={chessPieceLUT.get(square.piece)}
                     index={square.index}
                     highlight={highlighted == square.index}
