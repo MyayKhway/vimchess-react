@@ -1,6 +1,4 @@
-import { readFileSync } from 'fs';
 import http from 'http';
-import https from 'https';
 import express from "express";
 import { Server } from 'socket.io';
 import { gameEnd, generateID } from './game';
@@ -31,11 +29,11 @@ let origin;
 if (process.env.NODE_ENV == "development") {
     origin = "http://localhost:5173";
 } else {
-    origin = "http://vimchess.kentlynn.me/";
+    origin = "http://vimchess.kentlynn.me";
 }
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: origin,
         methods: ["GET", "POST"]
     },
     //handlePreflightRequest: (req, res) => {
@@ -134,6 +132,6 @@ io.on('connection', (sock) => {
 
 server.on('error', (err) => console.error(err));
 
-server.listen(3000, () => {
+server.listen(8000, () => {
     console.log('server is ready on 8000');
 })

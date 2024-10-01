@@ -32,11 +32,11 @@ if (process.env.NODE_ENV == "development") {
     origin = "http://localhost:5173";
 }
 else {
-    origin = "http://vimchess.kentlynn.me/";
+    origin = "http://vimchess.kentlynn.me";
 }
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "*",
+        origin: origin,
         methods: ["GET", "POST"]
     },
     //handlePreflightRequest: (req, res) => {
