@@ -5,8 +5,7 @@ let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 if (process.env.NODE_ENV == 'development') {
     socket = io("http://localhost:8000",);
 } else {
-    socket = io(
-        "http://vimchess.kentlynn.me", { path: "/socket.io/" });
+    socket = io("http://vimchess.kentlynn.me");
 }
 
 export default socket;
