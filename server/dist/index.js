@@ -20,12 +20,11 @@ if (process.env.NODE_ENV == "development") {
     server = http_1.default.createServer(app);
 }
 else {
-    server = http_1.default.createServer(app);
-    //server = https.createServer({
-    //   cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem", "utf8"),
-    //   key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem", "utf8"),
-    //ca: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/chain.pem", "utf8"),
-    //}, app);
+    server = https.createServer({
+        cert: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/cert.pem", "utf8"),
+        key: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/privkey.pem", "utf8"),
+        ca: readFileSync("/etc/letsencrypt/live/vimchess.kentlynn.me/chain.pem", "utf8"),
+    }, app);
 }
 let origin;
 if (process.env.NODE_ENV == "development") {
