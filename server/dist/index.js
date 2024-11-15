@@ -52,7 +52,6 @@ const io = new socket_io_1.Server(server, {
 io.on('connection', (sock) => {
     sock.on('dummy', (board) => console.log(board));
     sock.on("game create", (sock_id) => {
-        console.log(`${sock_id} is on game create`);
         let game_code = (0, game_1.generateID)(games);
         let board = (0, utils_1.FENtoBoard)(ini_board);
         games[game_code] = {
