@@ -59,6 +59,3 @@ export interface ClientToServerEvents {
     board: BoardType
   ) => void,
 }
-
-export interface SocketData {
-}

@@ -22,7 +22,8 @@ export default function handleKeyDown(
   // and highlighted as arguments. I can just pass a function to setSelected and 
   // setHighlighted
   // https://legacy.reactjs.org/docs/hooks-reference.html#functional-updates
-  if (!!socket.id == undefined) {
+  if (!socket.id) {
+    console.log("no socket id assigned yet.")
     return
   }
   const piece = board[Math.floor(highlighted / 8)][highlighted % 8].piece;
@@ -33,8 +34,13 @@ export default function handleKeyDown(
   if (e.key == "i" || e.key == "Enter") {
     // select the current cell
     if (selected != -1) {
+      if (highlighted == selected) {
+        setAvailableMoves([])
+      } else if (!availableMoves.some((ele: number) => ele == highlighted)) {
+        console.log("Invalid move attempted.")
+      }
       // move to that position ( attack the square if enemy )
-      let [newBoard, captured] = move(selected, highlighted, board, availableMoves);
+      const [newBoard, captured] = move(selected, highlighted, board, availableMoves);
       if (captured != null) {
         if (team == "white") {
           // TODO implement capture function
@@ -51,6 +57,7 @@ export default function handleKeyDown(
         }
       }
       setAvailableMoves([]);
+      setSelected(-1)
     } else {
       if (board[Math.floor(highlighted / 8)][highlighted % 8].piece == null) {
         console.log("You cannot select the blank square");
@@ -59,30 +66,24 @@ export default function handleKeyDown(
         console.log("You cannot select the enemies piece.");
       }
       setSelected(highlighted);
-      let availableMoves = listValidMoves(highlighted, piece, board, team);
-      console.log(availableMoves);
+      const availableMoves = listValidMoves(highlighted, piece, board, team);
       setAvailableMoves(availableMoves);
-
     }
   } else if (e.key == "j") {
     // move down j
     if (!last_rank.includes(highlighted)) {
       const new_highlighted: number = highlighted + 8;
-      console.log(new_highlighted);
       setHighlighted(new_highlighted);
     } else {
       const new_highlighted = highlighted % 8;
-      console.log(new_highlighted);
       setHighlighted(new_highlighted);
     }
   } else if (e.key == "k") {
     // move down k
     if (!first_rank.includes(highlighted)) {
       const new_highlighted: number = highlighted - 8;
-      console.log(new_highlighted);
       setHighlighted(new_highlighted);
     } else {
-      console.log("first rank");
       const new_highlighted = highlighted + 56;
       setHighlighted(new_highlighted);
     }
