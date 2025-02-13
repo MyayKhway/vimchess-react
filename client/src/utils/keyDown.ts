@@ -15,7 +15,8 @@ export default function handleKeyDown(
   board: BoardType,
   socket: Socket<ServerToClientEvents, ClientToServerEvents>,
   team: string,
-  gameCode: string
+  gameCode: string,
+  canMove: boolean
 ) {
   let secondG = false;
   // if I used functional updates I would not need previous states like selected
@@ -33,6 +34,10 @@ export default function handleKeyDown(
   const last_rank = [56, 57, 58, 59, 60, 61, 62, 63]
   if (e.key == "i" || e.key == "Enter") {
     // select the current cell
+    if (!canMove) {
+      console.log("moving not allowed yet.")
+      return
+    }
     if (selected != -1) {
       if (highlighted == selected) {
         setAvailableMoves([])
@@ -71,6 +76,10 @@ export default function handleKeyDown(
     }
   } else if (e.key == "j") {
     // move down j
+    if (!canMove) {
+      console.log("moving not allowed yet.")
+      return
+    }
     if (!last_rank.includes(highlighted)) {
       const new_highlighted: number = highlighted + 8;
       setHighlighted(new_highlighted);
@@ -79,6 +88,10 @@ export default function handleKeyDown(
       setHighlighted(new_highlighted);
     }
   } else if (e.key == "k") {
+    if (!canMove) {
+      console.log("moving not allowed yet.")
+      return
+    }
     // move down k
     if (!first_rank.includes(highlighted)) {
       const new_highlighted: number = highlighted - 8;
@@ -96,6 +109,10 @@ export default function handleKeyDown(
       setHighlighted(new_highlighted);
     }
   } else if (e.key == "l") {
+    if (!canMove) {
+      console.log("moving not allowed yet.")
+      return
+    }
     // move left h
     if (!last_file.includes(highlighted)) {
       const new_highlighted = highlighted + 1;
@@ -112,10 +129,22 @@ export default function handleKeyDown(
       secondG = true;
     }
   } else if (e.key == "G") {
+    if (!canMove) {
+      console.log("moving not allowed yet.")
+      return
+    }
     setHighlighted(56);
   } else if (e.key == "0") {
+    if (!canMove) {
+      console.log("moving not allowed yet.")
+      return
+    }
     setHighlighted(prev => Math.floor(prev / 8) * 8);
   } else if (e.key == "%") {
+    if (!canMove) {
+      console.log("moving not allowed yet.")
+      return
+    }
     setHighlighted(prev => (Math.floor(prev / 8) * 8) + 7);
   }
 }

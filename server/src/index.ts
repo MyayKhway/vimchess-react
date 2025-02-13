@@ -117,7 +117,20 @@ io.on('connection', (sock) => {
       else if (games[game_id]['white'] == 'not_assigned') games[game_id]['white'] = sock_id;
       sock.join(game_id);
       sock.emit('game ready', games[game_id], game_id);
+      io.to(games[game_id]['white']).emit("second player joined")
     }
+  })
+
+  sock.on('one player ready', (game_id: string, sock_id: string) => {
+    const currGame = games[game_id]
+    if (currGame['white'] == sock_id)
+      io.to(games[game_id]['black']).emit('one player ready')
+    else
+      io.to(games[game_id]['white']).emit('one player ready')
+  })
+
+  sock.on('second player ready', () => {
+    io.emit('game start')
   })
 
   setInterval(() => {

@@ -36,6 +36,7 @@ export interface ServerToClientEvents {
   'Victory': () => void,
   'board update': (game: GameType) => void,
   'game not created': (id: string) => void,
+  'game start': () => void
 
 }
 
@@ -58,4 +59,7 @@ export interface ClientToServerEvents {
   'dummy': (
     board: BoardType
   ) => void,
+  'second player joined': () => void,
+  'one player ready': (game_code: string, socket_id: string) => void,
+  'second player ready': (game_code: string) => void
 }

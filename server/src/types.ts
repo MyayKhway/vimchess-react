@@ -57,7 +57,9 @@ export type ClientToServerEvents = {
   ) => void,
   'dummy': (
     fen: string
-  ) => void
+  ) => void,
+  'second player joined': () => void,
+  'one player ready': (game_code: string) => void,
 }
 
 export type SocketData = {
