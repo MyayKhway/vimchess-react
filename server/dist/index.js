@@ -133,8 +133,8 @@ io.on('connection', (sock) => {
     });
     setInterval(() => {
     }, 300);
-    sock.on('disconnect', (sock_id) => {
-        console.log('user disconnected.');
+    sock.on('disconnect', (reason) => {
+        console.log(`user disconnected due to ${reason}.`);
     });
 });
 server.on('error', (err) => console.error(err));

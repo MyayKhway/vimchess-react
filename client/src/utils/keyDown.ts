@@ -49,9 +49,9 @@ export default function handleKeyDown(
       if (captured != null) {
         if (team == "white") {
           // TODO implement capture function
-          socket.emit('piece captured', newBoard, socket.id || "", "", captured, gameCode);
+          socket.emit('piece captured', newBoard, socket.id, "", captured, gameCode);
         } else if (team == "black") {
-          socket.emit('piece captured', reverseBoard(newBoard), socket.id || "", captured, "", gameCode);
+          socket.emit('piece captured', reverseBoard(newBoard), socket.id, captured, "", gameCode);
         }
       }
       else {

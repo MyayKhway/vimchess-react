@@ -6,12 +6,10 @@ import { Server } from 'socket.io';
 import { gameEnd, generateID } from './game';
 import { GamesType, GameType, BoardType } from './types';
 import { FENtoBoard, boardtoFEN } from './utils';
-import cors from "cors";
 
 let games: GamesType = {};
 
 const app = express();
-app.use(cors);
 
 /*const ini_board = 'r7/8/8/8/8/8/PPPPPPPP/RNBQKBNR';*/
 /*const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/8/7R';*/
@@ -79,7 +77,8 @@ io.on('connection', (sock) => {
     io.to(game_code).emit('board update', updated_game);
   });
 
-  sock.on('piece captured', (board, white_piece, black_piece, game_code) => {
+  sock.on('piece captured', (board: BoardType, sock_id: string, white_piece: string, black_piece: string, game_code: string) => {
+    console.log(board, white_piece, black_piece, game_code)
     let fen = boardtoFEN(board);
     if (gameEnd(fen)) {
       if (fen.toUpperCase() == fen) {
@@ -136,8 +135,8 @@ io.on('connection', (sock) => {
   setInterval(() => {
   }, 300);
 
-  sock.on('disconnect', (sock_id) => {
-    console.log('user disconnected.')
+  sock.on('disconnect', (reason) => {
+    console.log(`user disconnected due to ${reason}.`)
   })
 
 });

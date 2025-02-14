@@ -59,7 +59,7 @@ export type ClientToServerEvents = {
     fen: string
   ) => void,
   'second player joined': () => void,
-  'one player ready': (game_code: string) => void,
+  'one player ready': (game_code: string, sock_id: string) => void,
 }
 
 export type SocketData = {
