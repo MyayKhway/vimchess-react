@@ -118,12 +118,23 @@ io.on('connection', (sock) => {
                 games[game_id]['white'] = sock_id;
             sock.join(game_id);
             sock.emit('game ready', games[game_id], game_id);
+            io.to(games[game_id]['white']).emit("second player joined");
         }
+    });
+    sock.on('one player ready', (game_id, sock_id) => {
+        const currGame = games[game_id];
+        if (currGame['white'] == sock_id)
+            io.to(games[game_id]['black']).emit('one player ready');
+        else
+            io.to(games[game_id]['white']).emit('one player ready');
+    });
+    sock.on('second player ready', () => {
+        io.emit('game start');
     });
     setInterval(() => {
     }, 300);
-    sock.on('disconnect', (sock_id) => {
-        console.log('user disconnected.');
+    sock.on('disconnect', (reason) => {
+        console.log(`user disconnected due to ${reason}.`);
     });
 });
 server.on('error', (err) => console.error(err));

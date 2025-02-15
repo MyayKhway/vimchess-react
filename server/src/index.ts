@@ -6,12 +6,10 @@ import { Server } from 'socket.io';
 import { gameEnd, generateID } from './game';
 import { GamesType, GameType, BoardType } from './types';
 import { FENtoBoard, boardtoFEN } from './utils';
-import cors from "cors";
 
 let games: GamesType = {};
 
 const app = express();
-app.use(cors);
 
 /*const ini_board = 'r7/8/8/8/8/8/PPPPPPPP/RNBQKBNR';*/
 /*const ini_board = 'rnbqkbnr/pppppppp/8/8/8/8/8/7R';*/
@@ -79,7 +77,8 @@ io.on('connection', (sock) => {
     io.to(game_code).emit('board update', updated_game);
   });
 
-  sock.on('piece captured', (board, white_piece, black_piece, game_code) => {
+  sock.on('piece captured', (board: BoardType, sock_id: string, white_piece: string, black_piece: string, game_code: string) => {
+    console.log(board, white_piece, black_piece, game_code)
     let fen = boardtoFEN(board);
     if (gameEnd(fen)) {
       if (fen.toUpperCase() == fen) {
@@ -117,14 +116,27 @@ io.on('connection', (sock) => {
       else if (games[game_id]['white'] == 'not_assigned') games[game_id]['white'] = sock_id;
       sock.join(game_id);
       sock.emit('game ready', games[game_id], game_id);
+      io.to(games[game_id]['white']).emit("second player joined")
     }
+  })
+
+  sock.on('one player ready', (game_id: string, sock_id: string) => {
+    const currGame = games[game_id]
+    if (currGame['white'] == sock_id)
+      io.to(games[game_id]['black']).emit('one player ready')
+    else
+      io.to(games[game_id]['white']).emit('one player ready')
+  })
+
+  sock.on('second player ready', () => {
+    io.emit('game start')
   })
 
   setInterval(() => {
   }, 300);
 
-  sock.on('disconnect', (sock_id) => {
-    console.log('user disconnected.')
+  sock.on('disconnect', (reason) => {
+    console.log(`user disconnected due to ${reason}.`)
   })
 
 });
